@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = mongoose.model('User');
 const router = express.Router();
+const requireAuth = require('../middleware/requireAuth');
 
 router.post('/signup', async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
@@ -53,5 +54,16 @@ router.post('/login', async (req, res) => {
         res.status(403).send({ error: 'error'})
     }
 });
+
+router.get('/user/:id', requireAuth, async (req, res) => {
+    const id = req.params.id
+    try {
+        const user = await User.findOne({_id:id}).select("-password")
+        return res.send(user);
+    } catch (err) {
+        console.log(err)
+        return res.status(401).send({error: err});
+    }
+})
 
 module.exports = router;
