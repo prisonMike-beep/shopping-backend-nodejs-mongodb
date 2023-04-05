@@ -1,18 +1,27 @@
-require('./models/User');
+require('./models/User')
+require('./models/Item')
+require('./models/Order')
+require('./models/Cart')
 
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
+const buyRoutes = require('./routes/buy');
+const sellRoutes = require('./routes/sell');
+const cartRoutes = require('./routes/cart');
 const requireAuth = require('./middleware/requireAuth');
 
-const app = express();
+const app = express()
 
 app.use(express.urlencoded({
     extended: true
 }))
-app.use(express.json());
-app.use(authRoutes);
+app.use(express.json())
+app.use(authRoutes)
+app.use(buyRoutes)
+app.use(sellRoutes)
+app.use(cartRoutes)
 
 dotenv.config();
 
